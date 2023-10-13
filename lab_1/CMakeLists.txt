@@ -3,4 +3,4 @@ project(lab_1)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(lab_1 main.cpp)
+add_executable(lab_1 main.cpp girvanNewmannAlgorithm.cpp girvanNewmannAlgorithm.h)
