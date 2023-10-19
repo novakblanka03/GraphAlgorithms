@@ -6,6 +6,26 @@
 #include <queue>
 #include <stack>
 
+vector<Edge> edgeListFromFile(int numberOfPoints, int numberOfEdges, istream &input){
+    if (!(input >> numberOfPoints >> numberOfEdges)) {
+        cerr << "Error reading numberOfPoints and numberOfEdges." << endl;
+        // Handle error or return an appropriate value
+        // For example, you can throw an exception or return an empty vector.
+        return vector<Edge>();
+    }
+    vector<Edge> result;
+    for (int i = 0; i < numberOfEdges; ++i) {
+        int start, end;
+        if (!(input >> start >> end)) {
+            cerr << "Error reading edge " << i << "." << endl;
+            // Handle error or return an appropriate value
+            // For example, you can throw an exception or return the partially constructed vector.
+            return result;
+        }
+        result.push_back({--start, --end, 1, 0});
+    }
+    return result;
+}
 
 vector<Point> neighListFromFile(int &numberOfPoints, int &numberOfEdges, istream &input) {
     if (!(input >> numberOfPoints >> numberOfEdges)) {
@@ -15,7 +35,7 @@ vector<Point> neighListFromFile(int &numberOfPoints, int &numberOfEdges, istream
         return vector<Point>();
     }
     vector<Point> result(numberOfPoints);
-    for (int i = 0; i < numberOfEdges - 1; ++i) {
+    for (int i = 0; i < numberOfEdges; ++i) {
         int start, end;
         if (!(input >> start >> end)) {
             cerr << "Error reading edge " << i << "." << endl;
@@ -40,10 +60,12 @@ void printNeighList(vector<Point> neighList, int &numberOfPoints, int &numberOfE
     output << endl;
 }
 
-void nrOfShortestPathsFromFirst(vector<Point> neighList, double **betweenness, int start) {
+void nrOfShortestPathsFromFirst(vector<Point> neighList, vector<Edge> &edgeList, int start) {
+//    for (int i = 0; i < edgeList.size(); ++i) {
+//        edgeList[i].betweenness = 1;
+//    }
     vector<int> level(neighList.size(), -1);
     vector<int> nrShortest(neighList.size(), 0);
-    start = --start;
     queue<int> bfsQueue;
     stack<int> betwStack;
     level[start] = 0;
@@ -76,16 +98,22 @@ void nrOfShortestPathsFromFirst(vector<Point> neighList, double **betweenness, i
             int b = neighList[a].neighbours[i];
             if (level[b] < level[a]) {
                 double sum = 0;
+                double endSum = 0;
                 for (int j = 0; j < neighList[a].neighbours.size(); ++j) {
                     int c = neighList[a].neighbours[j];
                     if (level[c] > level[a]) {
-                        sum += betweenness[a][c];
+                        int pos = findEdgePosition(edgeList, a, c);
+                        if (pos != -1) {
+                            sum += edgeList[pos].betweenness;
+                        }
                     }
                 }
                 double by = (double) nrShortest[b] / (double) nrShortest[a];
-                double endSum = (1 + sum) * by;
-                betweenness[a][b] = endSum;
-                betweenness[b][a] = endSum;
+                endSum = (1 + sum) * by;
+                int pos1 = findEdgePosition(edgeList, a, b);
+                if (pos1 != -1) {
+                    edgeList[pos1].betweenness += endSum;
+                }
             }
         }
         betwStack.pop();
@@ -101,16 +129,41 @@ void removeEdge(vector<Point> &neighList, int node1, int node2) {
             neighList[node2].neighbours.end());
 }
 
-double determineMaxBetweenness(double **final_betweenness, int numberOfPoints, int &maxEdgeBegin, int &maxEdgeEnd) {
+double determineMaxBetweenness(vector<Edge> edgeList) {
     double max = -1;
-    for (int i = 0; i < numberOfPoints; ++i) {
-        for (int j = 0; j < numberOfPoints; ++j) {
-            if (final_betweenness[i][j] > max) {
-                max = final_betweenness[i][j];
-                maxEdgeBegin = i;
-                maxEdgeEnd = j;
-            }
+    for (int i = 0; i < edgeList.size(); ++i) {
+        if(edgeList[i].final_betweenness > max){
+            max = edgeList[i].final_betweenness;
         }
     }
     return max;
+}
+
+void printEdgeList(vector<Edge> vector1) {
+    for (int i = 0; i < vector1.size(); ++i) {
+        cout << vector1[i].start + 1 << " " << vector1[i].end + 1 << " " << vector1[i].betweenness  << " " << vector1[i].final_betweenness << endl;
+    }
+    cout << endl;
+}
+
+int findEdgePosition(vector<Edge> edgeVector, int targetStart, int targetEnd) {
+    auto condition = [targetStart, targetEnd](const Edge& edge) {
+        return edge.start == targetStart && edge.end == targetEnd;
+    };
+
+    auto it = std::find_if(edgeVector.begin(), edgeVector.end(), condition);
+
+    if (it != edgeVector.end()) {
+        return (int) distance(edgeVector.begin(), it); // Element found, return its position
+    } else {
+        return -1; // Element not found
+    }
+}
+
+void removeEdgeFromEdgeList(vector<Edge> &edgeList, int index) {
+    if (index >= 0 && index < edgeList.size()) {
+        edgeList.erase(edgeList.begin() + index);
+    } else {
+        cerr << "Invalid index. Edge not removed." << endl;
+    }
 }

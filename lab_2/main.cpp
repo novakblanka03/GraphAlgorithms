@@ -14,8 +14,12 @@ vector<Point> neighListFromFile(int &numberOfPoints, int &numberOfEdges, istream
 
 void printNeighList(vector<Point> neighList, int &numberOfPoints, int &numberOfEdges, ostream &output = cout);
 
+void pruferCode(vector<Point> &neighList);
+
+void pruferDecode(vector<Point> &neighList);
+
 int main(int argc, char **argv) {
-    ifstream graphIn(argv[2]);
+    ifstream graphIn(argv[1]);
     if (!graphIn) {
         cerr << "Error opening input file." << endl;
         return 1; // Return an error code
@@ -23,6 +27,7 @@ int main(int argc, char **argv) {
     int numberOfPoints, numberOfEdges;
     vector<Point> neighList = neighListFromFile(numberOfPoints, numberOfEdges, graphIn);
     printNeighList(neighList, numberOfPoints, numberOfEdges);
+
 
 
 
@@ -60,4 +65,8 @@ void printNeighList(vector<Point> neighList, int &numberOfPoints, int &numberOfE
         output << endl;
     }
     output << endl;
+}
+
+void pruferCode(vector<Point> &neighList) {
+
 }
