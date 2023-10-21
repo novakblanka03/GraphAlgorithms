@@ -102,7 +102,14 @@ void nrOfShortestPathsFromFirst(vector<Point> neighList, vector<Edge> &edgeList,
             int c = neighList[a].neighbours[j];
             if (level[c] > level[a]) {
                 int pos = findEdgePosition(edgeList, a, c);
-                sum += edgeList[pos].betweenness;
+                if(pos != -1){
+                    sum += edgeList[pos].betweenness;
+                }else{
+                    int pos2 = findEdgePosition(edgeList, c, a);
+                    if(pos2 != -1){
+                        sum += edgeList[pos2].betweenness;
+                    }
+                }
             }
         }
         for (int i = 0; i < neighList[a].neighbours.size(); ++i) {
@@ -111,7 +118,14 @@ void nrOfShortestPathsFromFirst(vector<Point> neighList, vector<Edge> &edgeList,
                 double by = (double) nrShortest[b] / (double) nrShortest[a];
                 double endSum = (1 + sum) * by;
                 int pos1 = findEdgePosition(edgeList, a, b);
-                edgeList[pos1].betweenness += endSum;
+                if(pos1 != -1){
+                    edgeList[pos1].betweenness += endSum;
+                }else{
+                    int pos2 = findEdgePosition(edgeList, b, a);
+                    if(pos2 != -1){
+                        edgeList[pos2].betweenness += endSum;
+                    }
+                }
             }
         }
         betwStack.pop();

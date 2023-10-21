@@ -3,8 +3,6 @@
 #include <algorithm>
 #include "girvanNewmannAlgorithm.h"
 
-void printEdgeList(vector<Edge> vector1, int points, int edges);
-
 using namespace std;
 
 int main(int argc, char **argv) {
@@ -29,12 +27,12 @@ int main(int argc, char **argv) {
                 edgeList[j].final_betweenness += edgeList[j].betweenness / 2;
             }
         }
-        printEdgeList(edgeList);
-        //max_betweenness = determineMaxBetweenness(edgeList);
 
         sort(edgeList.begin(), edgeList.end(), [](Edge a, Edge b) {
             return a.final_betweenness > b.final_betweenness;
         });
+
+        printEdgeList(edgeList);
 
         max_betweenness = edgeList[0].final_betweenness;
 
@@ -45,23 +43,13 @@ int main(int argc, char **argv) {
             --numberOfEdges;
         }
         cout << "---------------------------------" << endl;
-//        for (int i = 0; i < edgeList.size(); ++i) {
-//            if (edgeList[i].final_betweenness == max_betweenness) {
-//                cout << "Cut edge: " << edgeList[i].start + 1 << " -- " << edgeList[i].end + 1 << endl;
-//                removeEdgeFromEdgeList(edgeList, i);
-//                removeEdge(neighList, edgeList[i].start, edgeList[i].end);
-//                --numberOfEdges;
-//            }
-//        }
+
         for (auto &edge: edgeList) {
             edge.betweenness = 0;
             edge.final_betweenness = 0;
         }
         cout << "Highest betweenness centrality: " << max_betweenness << "\nNumber of edges left: " << numberOfEdges << endl << endl;
     }
-
-    //printNeighList(neighList, numberOfPoints, numberOfEdges);
-
 
     graphIn.close();
     return 0;
