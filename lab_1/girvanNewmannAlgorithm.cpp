@@ -6,7 +6,7 @@
 #include <queue>
 #include <stack>
 
-vector<Edge> edgeListFromFile(int numberOfPoints, int numberOfEdges, istream &input){
+vector<Edge> edgeListFromFile(int numberOfPoints, int numberOfEdges, istream &input) {
     if (!(input >> numberOfPoints >> numberOfEdges)) {
         cerr << "Error reading numberOfPoints and numberOfEdges." << endl;
         // Handle error or return an appropriate value
@@ -22,7 +22,7 @@ vector<Edge> edgeListFromFile(int numberOfPoints, int numberOfEdges, istream &in
             // For example, you can throw an exception or return the partially constructed vector.
             return result;
         }
-        result.push_back({--start, --end, 1, 0});
+        result.push_back({--start, --end, 0, 0});
     }
     return result;
 }
@@ -92,28 +92,26 @@ void nrOfShortestPathsFromFirst(vector<Point> neighList, vector<Edge> &edgeList,
         }
         bfsQueue.pop();
     }
+//    for (int i = 0; i < neighList.size(); ++i) {
+//        cout << i + 1 << " Level: " << level[i] << " nrShortest: " << nrShortest[i] << endl;
+//    }
     while (!betwStack.empty()) {
         int a = betwStack.top();
+        double sum = 0;
+        for (int j = 0; j < neighList[a].neighbours.size(); ++j) {
+            int c = neighList[a].neighbours[j];
+            if (level[c] > level[a]) {
+                int pos = findEdgePosition(edgeList, a, c);
+                sum += edgeList[pos].betweenness;
+            }
+        }
         for (int i = 0; i < neighList[a].neighbours.size(); ++i) {
             int b = neighList[a].neighbours[i];
             if (level[b] < level[a]) {
-                double sum = 0;
-                double endSum = 0;
-                for (int j = 0; j < neighList[a].neighbours.size(); ++j) {
-                    int c = neighList[a].neighbours[j];
-                    if (level[c] > level[a]) {
-                        int pos = findEdgePosition(edgeList, a, c);
-                        if (pos != -1) {
-                            sum += edgeList[pos].betweenness;
-                        }
-                    }
-                }
                 double by = (double) nrShortest[b] / (double) nrShortest[a];
-                endSum = (1 + sum) * by;
+                double endSum = (1 + sum) * by;
                 int pos1 = findEdgePosition(edgeList, a, b);
-                if (pos1 != -1) {
-                    edgeList[pos1].betweenness += endSum;
-                }
+                edgeList[pos1].betweenness += endSum;
             }
         }
         betwStack.pop();
@@ -132,7 +130,7 @@ void removeEdge(vector<Point> &neighList, int node1, int node2) {
 double determineMaxBetweenness(vector<Edge> edgeList) {
     double max = -1;
     for (int i = 0; i < edgeList.size(); ++i) {
-        if(edgeList[i].final_betweenness > max){
+        if (edgeList[i].final_betweenness > max) {
             max = edgeList[i].final_betweenness;
         }
     }
@@ -141,13 +139,14 @@ double determineMaxBetweenness(vector<Edge> edgeList) {
 
 void printEdgeList(vector<Edge> vector1) {
     for (int i = 0; i < vector1.size(); ++i) {
-        cout << vector1[i].start + 1 << " " << vector1[i].end + 1 << " " << vector1[i].betweenness  << " " << vector1[i].final_betweenness << endl;
+        cout << vector1[i].start + 1 << " " << vector1[i].end + 1 << " " << vector1[i].betweenness << " "
+             << vector1[i].final_betweenness << endl;
     }
     cout << endl;
 }
 
 int findEdgePosition(vector<Edge> edgeVector, int targetStart, int targetEnd) {
-    auto condition = [targetStart, targetEnd](const Edge& edge) {
+    auto condition = [targetStart, targetEnd](const Edge &edge) {
         return edge.start == targetStart && edge.end == targetEnd;
     };
 

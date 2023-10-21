@@ -44,6 +44,7 @@ int main(int argc, char **argv) {
             removeEdge(neighList, edgeList[0].start, edgeList[0].end);
             --numberOfEdges;
         }
+        cout << "---------------------------------" << endl;
 //        for (int i = 0; i < edgeList.size(); ++i) {
 //            if (edgeList[i].final_betweenness == max_betweenness) {
 //                cout << "Cut edge: " << edgeList[i].start + 1 << " -- " << edgeList[i].end + 1 << endl;
@@ -53,7 +54,7 @@ int main(int argc, char **argv) {
 //            }
 //        }
         for (auto &edge: edgeList) {
-            edge.betweenness = 1;
+            edge.betweenness = 0;
             edge.final_betweenness = 0;
         }
         cout << "Highest betweenness centrality: " << max_betweenness << "\nNumber of edges left: " << numberOfEdges << endl << endl;
