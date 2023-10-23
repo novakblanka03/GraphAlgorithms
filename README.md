@@ -2,4 +2,4 @@
 
 ## lab_1 - Girvan-Newmann algorithm
 
-##lab_2 - Prüfer -code and -decode
+## lab_2 - Prüfer -code and -decode
