@@ -14,9 +14,11 @@ vector<Point> neighListFromFile(int &numberOfPoints, int &numberOfEdges, istream
 
 void printNeighList(vector<Point> neighList, int &numberOfPoints, int &numberOfEdges, ostream &output = cout);
 
-void pruferCode(vector<Point> &neighList);
+void pruferCode(vector<Point> &neighList, vector<int> &prufer, int numPoints);
 
 void pruferDecode(vector<Point> &neighList);
+
+void removeEdge(vector<Point> &neighList, int node1, int node2);
 
 int main(int argc, char **argv) {
     ifstream graphIn(argv[1]);
@@ -28,7 +30,12 @@ int main(int argc, char **argv) {
     vector<Point> neighList = neighListFromFile(numberOfPoints, numberOfEdges, graphIn);
     printNeighList(neighList, numberOfPoints, numberOfEdges);
 
-
+    vector<int> prufer;
+    pruferCode(neighList, prufer, numberOfPoints);
+    cout << "Prufer code: ";
+    for (auto code:prufer) {
+        cout << code + 1 << " ";
+    }
 
 
     return 0;
@@ -67,6 +74,29 @@ void printNeighList(vector<Point> neighList, int &numberOfPoints, int &numberOfE
     output << endl;
 }
 
-void pruferCode(vector<Point> &neighList) {
+void pruferCode(vector<Point> &neighList, vector<int> &prufer, int numPoints) {
+    int i = 0;
+    while(prufer.size() < numPoints - 2) {
+        if(neighList[i].neighbours.size() == 1){
+            int neighbour = neighList[i].neighbours[0];
+            prufer.push_back(neighbour);
+            removeEdge(neighList, i, neighbour);
+            i = 0;
+        } else{
+            ++i;
+        }
+    }
+}
+
+void removeEdge(vector<Point> &neighList, int node1, int node2) {
+    neighList[node1].neighbours.erase(
+            remove(neighList[node1].neighbours.begin(), neighList[node1].neighbours.end(), node2),
+            neighList[node1].neighbours.end());
+    neighList[node2].neighbours.erase(
+            remove(neighList[node2].neighbours.begin(), neighList[node2].neighbours.end(), node1),
+            neighList[node2].neighbours.end());
+}
+
+void pruferDecode(vector<Point> &neighList) {
 
 }
