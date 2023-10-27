@@ -69,12 +69,13 @@ void dfsTraversal(vector<Point> &neighList, int u, vector<int> &color, int &time
     color[u] = GRAY;
     time++;
     reach[u] = time;
+    bool ok = false;
     for (int i = 0; i < neighList[u].neighbours.size(); ++i) {
         int v = neighList[u].neighbours[i];
         if (color[v] == WHITE) {
             edgeType[u][v] = TREE;
             edgeType[v][u] = TREE;
-            dfsTraversal(neighList, v, color, time, reach, leave, edgeType);
+            ok = true;
         } else if(color[v] == GRAY){
             edgeType[u][v] = BACK;
             edgeType[v][u] = BACK;
@@ -86,6 +87,9 @@ void dfsTraversal(vector<Point> &neighList, int u, vector<int> &color, int &time
                 edgeType[u][v] = FORWARD;
                 edgeType[v][u] = FORWARD;
             }
+        }
+        if(ok){
+            dfsTraversal(neighList, v, color, time, reach, leave, edgeType);
         }
     }
     color[u] = BLACK;
