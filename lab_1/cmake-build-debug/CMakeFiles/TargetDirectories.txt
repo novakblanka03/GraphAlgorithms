@@ -1,3 +1,0 @@
-C:/Users/novak/Documents/Egyetem/2_ev/GrafAlgoritmusok/GraphAlgorithms/lab_1/cmake-build-debug/CMakeFiles/lab_1.dir
-C:/Users/novak/Documents/Egyetem/2_ev/GrafAlgoritmusok/GraphAlgorithms/lab_1/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/novak/Documents/Egyetem/2_ev/GrafAlgoritmusok/GraphAlgorithms/lab_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

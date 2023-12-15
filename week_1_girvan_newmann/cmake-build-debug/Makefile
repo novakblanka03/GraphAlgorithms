@@ -116,7 +116,7 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named lab_1
+# Target rules for targets named week_1_girvan_newmann
 
 # Build rule for target.
 lab_1: cmake_check_build_system

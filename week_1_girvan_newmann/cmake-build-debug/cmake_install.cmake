@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/novak/Documents/Egyetem/2_ev/GrafAlgoritmusok/GraphAlgorithms/lab_1
+# Install script for directory: C:/Users/novak/Documents/Egyetem/2_ev/GrafAlgoritmusok/GraphAlgorithms/week_1_girvan_newmann
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/lab_1")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/week_1_girvan_newmann")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/novak/Documents/Egyetem/2_ev/GrafAlgoritmusok/GraphAlgorithms/lab_1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/novak/Documents/Egyetem/2_ev/GrafAlgoritmusok/GraphAlgorithms/week_1_girvan_newmann/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
